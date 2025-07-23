@@ -1,140 +1,35 @@
- <!DOCTYPE html>
+<!-- index.html -->
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>UNIPORT Map Dashboard</title>
-  <link rel="stylesheet" href="style.css">
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
-  
-   
-  
+  <title>UNIPORT Navigator - Welcome</title>
+  <link rel="stylesheet" href="welcome.css">
+  <!-- Lottie Animation CDN -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body>
-  <header class="topbar">
- 
-    <img src="image/UNIPORTLOGOpng.png" alt="UNIPORT Logo" class="topbar-logo" />
-    <input type="text" id="searchBox" placeholder="Search location..." class="search-bar" />
-       <button class="menu-btn" onclick="toggleSidebar()">☰</button>
-  </header>
+  <div class="welcome-container">
+    <img src="image/UNIPORTLOGOpng.png" alt="UNIPORT Logo" class="logo" />
 
-  <div class="dashboard">
-    <aside class="sidebar">
-      <h3>Popular Locations</h3>
-      <ul>
-        <li onclick="flyToLocation(1)">Faculty of Computing</li>
-        <li onclick="flyToLocation(2)">Faculty of Law</li>
-        <li onclick="flyToLocation(3)">Abuja Hostel</li>
-        <li onclick="flyToLocation(4)">Medical Centre</li>
-        <li onclick="flyToLocation(5)">Donald Ekong Library</li>
-        <li onclick="flyToLocation(6)">Ofrima Complex</li>
-        <li onclick="flyToLocation(7)">Choba Gate</li>
-      </ul>
-    </aside>
+    <h1 class="welcome-text">
+      Welcome to <span>UNIPORT Navigator</span><br>
+      Your sure guide  on campus!
+    </h1>
+<lottie-player   src="https://assets2.lottiefiles.com/packages/lf20_UJNc2t.json"  background="transparent" speed="1" 
+      style="width: 300px; margin-left: 15px; height: 250px;" 
+      loop 
+      autoplay>
+    </lottie-player>
 
-    <div id="map"></div>
+    <button onclick="goToLogin()" class="get-started-btn">Get Started</button>
   </div>
 
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
   <script>
-    const locations = [
-      { id: 1, name: "Faculty of Computing", lat: 4.901, lng: 6.921, type: "Faculty", image: "images/computing.jpg" },
-      { id: 2, name: "Faculty of Law", lat: 4.903, lng: 6.924, type: "Faculty", image: "images/law.jpg" },
-      { id: 3, name: "Abuja Hostel", lat: 4.904, lng: 6.917, type: "Hostel", image: "images/hostel.jpg" },
-      { id: 4, name: "Medical Centre", lat: 4.899, lng: 6.920, type: "Clinic", image: "images/medical.jpg" },
-      { id: 5, name: "Donald Ekong Library", lat: 4.902, lng: 6.922, type: "Library", image: "images/library.jpg" },
-      { id: 6, name: "Ofrima Complex", lat: 4.900, lng: 6.919, type: "Lecture Hall", image: "images/ofrima.jpg" },
-      { id: 7, name: "Choba Gate", lat: 4.905, lng: 6.915, type: "Gate", image: "images/gate.jpg" },
-    ];
-
-    const map = L.map('map').setView([4.901, 6.921], 16);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
-
-    let routeControl = null;
-
-    locations.forEach(loc => {
-      const marker = L.marker([loc.lat, loc.lng]).addTo(map);
-      marker.on('click', () => {
-        if (!navigator.geolocation) {
-          showPopup(loc, null);
-        } else {
-          navigator.geolocation.getCurrentPosition(pos => {
-            const dist = getDistanceFromLatLng(pos.coords.latitude, pos.coords.longitude, loc.lat, loc.lng);
-            showPopup(loc, dist);
-          }, () => {
-            showPopup(loc, null);
-          });
-        }
-      });
-    });
-
-    function showPopup(loc, distanceKm) {
-      const popupContent = `
-        <div style="max-width: 220px;">
-          <img src="${loc.image}" alt="${loc.name}" style="width:100%; border-radius:8px; margin-bottom:6px;">
-          <strong>${loc.name}</strong><br>
-          <span style="font-size: 0.9em; background: #00703C; color: white; padding: 2px 6px; border-radius: 6px;">
-            ${loc.type}
-          </span><br/>
-          ${distanceKm ? `<p style=\"margin:4px 0;\">📏 Distance: ${distanceKm.toFixed(2)} km</p>` : ""}
-          <button onclick="getDirections(${loc.lat}, ${loc.lng})">Get Directions</button>
-        </div>
-      `;
-      L.popup().setLatLng([loc.lat, loc.lng]).setContent(popupContent).openOn(map);
+    function goToLogin() {
+      window.location.href = "map.html";
     }
-
-    function getDistanceFromLatLng(lat1, lng1, lat2, lng2) {
-      function toRad(x) {
-        return x * Math.PI / 180;
-      }
-      const R = 6371;
-      const dLat = toRad(lat2 - lat1);
-      const dLng = toRad(lng2 - lng1);
-      const a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-                Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-                Math.sin(dLng/2) * Math.sin(dLng/2);
-      const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      return R * c;
-    }
-
-    function getDirections(destLat, destLng) {
-      if (!navigator.geolocation) {
-        alert("Geolocation not supported by your browser.");
-        return;
-      }
-      navigator.geolocation.getCurrentPosition(position => {
-        const userLat = position.coords.latitude;
-        const userLng = position.coords.longitude;
-        if (routeControl) map.removeControl(routeControl);
-        routeControl = L.Routing.control({
-          waypoints: [L.latLng(userLat, userLng), L.latLng(destLat, destLng)],
-          routeWhileDragging: false
-        }).addTo(map);
-      }, () => {
-        alert("Could not get your location.");
-      });
-    }
-
-    function flyToLocation(id) {
-      const loc = locations.find(l => l.id === id);
-      map.flyTo([loc.lat, loc.lng], 18);
-    }
-
-    function toggleSidebar() {
-      const sidebar = document.querySelector('.sidebar');
-      sidebar.classList.toggle('open');
-    }
-
-    document.getElementById("searchBox").addEventListener("input", function(e) {
-      const query = e.target.value.toLowerCase();
-      const match = locations.find(loc => loc.name.toLowerCase().includes(query));
-      if (match) flyToLocation(match.id);
-    });
   </script>
 </body>
 </html>
-

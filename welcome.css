@@ -1,0 +1,74 @@
+/* welcome.css */
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: linear-gradient(to right, #00703C, #0057A3);
+  color: white;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.welcome-container {
+  max-width: 500px;
+  padding: 10px;
+  border-radius: 12px;
+  animation: fadeIn 1.5s ease-in-out;
+}
+
+.logo {
+  width: 100px;
+  margin-top: 10px;
+}
+
+.welcome-text {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+}
+
+.welcome-text span {
+  font-weight: bold;
+  color: #00FFB0;
+}
+
+.get-started-btn {
+  background-color: white;
+  color: #00703C;
+  border: none;
+  padding: 12px 24px;
+  font-size: 1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.get-started-btn:hover {
+  background-color: #f0f0f0;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  } to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 500px) {
+  .welcome-text {
+    font-size: 1.2rem;
+  }
+
+  .get-started-btn {
+    padding: 10px 20px;
+    font-size: 0.95rem;
+  }
+}
