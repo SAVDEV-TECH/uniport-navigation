@@ -35,6 +35,9 @@
     </aside>
 
     <div id="map"></div>
+    <!-- Image Modal -->
+ 
+
   </div>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
@@ -45,8 +48,8 @@
       { id: 2, name: "Faculty of Law", lat: 4.903, lng: 6.924, type: "Faculty", image: "images/law.jpg" },
       { id: 3, name: "Abuja Hostel", lat: 4.904, lng: 6.917, type: "Hostel", image: "images/hostel.jpg" },
       { id: 4, name: "Medical Centre", lat: 4.899, lng: 6.920, type: "Clinic", image: "images/medical.jpg" },
-      { id: 5, name: "Donald Ekong Library", lat: 4.902, lng: 6.922, type: "Library", image: "images/library.jpg" },
-      { id: 6, name: "Ofrima Complex", lat: 4.900, lng: 6.919, type: "Lecture Hall", image: "images/ofrima.jpg" },
+      { id: 5, name: "Donald Ekong Library", lat: 4.902, lng: 6.922, type: "Library", image: "image/library.jpg" },
+      { id: 6, name: "Ofrima Complex", lat: 4.900, lng: 6.919, type: "Lecture Hall", image: "image/ofrima.jpg" },
       { id: 7, name: "Choba Gate", lat: 4.905, lng: 6.915, type: "Gate", image: "images/gate.jpg" },
     ];
 
@@ -175,45 +178,45 @@
 });
 
 
-let userMarker = null;
+// let userMarker = null;
 
-function trackLiveLocation() {
-  if (!navigator.geolocation) {
-    alert("Geolocation not supported.");
-    return;
-  }
+// function trackLiveLocation() {
+//   if (!navigator.geolocation) {
+//     alert("Geolocation not supported.");
+//     return;
+//   }
 
-  navigator.geolocation.watchPosition(
-    (pos) => {
-      const lat = pos.coords.latitude;
-      const lng = pos.coords.longitude;
+//   navigator.geolocation.watchPosition(
+//     (pos) => {
+//       const lat = pos.coords.latitude;
+//       const lng = pos.coords.longitude;
 
-      if (userMarker) {
-        userMarker.setLatLng([lat, lng]);
-      } else {
-        userMarker = L.marker([lat, lng], {
-          icon: L.icon({
-            iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
-            iconSize: [30, 30],
-            iconAnchor: [15, 15],
-          })
-        }).addTo(map).bindPopup("📍 You are here").openPopup();
-      }
-    },
-    (err) => {
-      console.error("Tracking error:", err);
-      alert("Unable to track live location.");
-    },
-    {
-      enableHighAccuracy: true,
-      maximumAge: 2000,
-      timeout: 10000
-    }
-  );
-}
-window.onload = () => {
-  trackLiveLocation(); // start live tracking
-};
+//       if (userMarker) {
+//         userMarker.setLatLng([lat, lng]);
+//       } else {
+//         userMarker = L.marker([lat, lng], {
+//           icon: L.icon({
+//             iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+//             iconSize: [30, 30],
+//             iconAnchor: [15, 15],
+//           })
+//         }).addTo(map).bindPopup("📍 You are here").openPopup();
+//       }
+//     },
+//     (err) => {
+//       console.error("Tracking error:", err);
+//       alert("Unable to track live location.");
+//     },
+//     {
+//       enableHighAccuracy: true,
+//       maximumAge: 2000,
+//       timeout: 10000
+//     }
+//   );
+// }
+// window.onload = () => {
+//   trackLiveLocation(); // start live tracking
+// };
 
 
   </script>
