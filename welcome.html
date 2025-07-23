@@ -1,0 +1,35 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>UNIPORT Navigator - Welcome</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Lottie Animation CDN -->
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+</head>
+<body>
+  <div class="welcome-container">
+    <img src="uniport-logo.png" alt="UNIPORT Logo" class="logo" />
+
+    <h1 class="welcome-text">
+      Welcome to <span>UNIPORT Navigator</span><br>
+      We’re ready to guide you anywhere on campus!
+    </h1>
+<lottie-player src="https://assets2.lottiefiles.com/packages/lf20_UJNc2t.json"  background="transparent" speed="1" 
+      style="width: 300px; height: 300px;" 
+      loop 
+      autoplay>
+    </lottie-player>
+
+    <button onclick="goToLogin()" class="get-started-btn">Get Started</button>
+  </div>
+
+  <script>
+    function goToLogin() {
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>
