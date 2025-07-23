@@ -31,6 +31,7 @@
         <li onclick="flyToLocation(6)">Ofrima Complex</li>
         <li onclick="flyToLocation(7)">Choba Gate</li>
       </ul>
+        <button onclick="locateUser()">📍 My Location</button>
     </aside>
 
     <div id="map"></div>
@@ -118,7 +119,20 @@
         alert("Could not get your location.");
       });
     }
+   function locateUser() {
+  if (!navigator.geolocation) return alert("Geolocation not supported.");
 
+  navigator.geolocation.getCurrentPosition(position => {
+    const { latitude, longitude } = position.coords;
+
+    userPosition = [latitude, longitude]; // Save location globally
+
+    L.marker(userPosition).addTo(map)
+      .bindPopup("📍 You are here").openPopup();
+
+    map.setView(userPosition, 17);
+  }, () => alert("Location access denied."));
+}
     function flyToLocation(id) {
       const loc = locations.find(l => l.id === id);
       map.flyTo([loc.lat, loc.lng], 18);
@@ -129,11 +143,79 @@
       sidebar.classList.toggle('open');
     }
 
-    document.getElementById("searchBox").addEventListener("input", function(e) {
-      const query = e.target.value.toLowerCase();
-      const match = locations.find(loc => loc.name.toLowerCase().includes(query));
-      if (match) flyToLocation(match.id);
-    });
+   document.getElementById("searchBox").addEventListener("keydown", function (e) {
+  if (e.key === "Enter") {
+    const query = e.target.value.trim().toLowerCase();
+    const match = locations.find(loc => loc.name.toLowerCase().includes(query));
+
+    if (match) {
+      map.flyTo([match.lat, match.lng], 18);
+
+      navigator.geolocation.getCurrentPosition(pos => {
+        const dist = getDistanceFromLatLng(pos.coords.latitude, pos.coords.longitude, match.lat, match.lng);
+        const popupContent = createPopupContent(match, dist);
+        const tempMarker = L.marker([match.lat, match.lng]).addTo(map);
+        tempMarker.bindPopup(popupContent).openPopup();
+
+        setTimeout(() => {
+          document.getElementById(`dir-btn-${match.id}`).addEventListener("click", () => {
+            getDirections(match.lat, match.lng);
+          });
+        }, 50);
+      }, () => {
+        const popupContent = createPopupContent(match, null);
+        const tempMarker = L.marker([match.lat, match.lng]).addTo(map);
+        tempMarker.bindPopup(popupContent).openPopup();
+      });
+
+    } else {
+      alert("Location not found. Please enter a valid place name.");
+    }
+  }
+});
+
+
+let userMarker = null;
+
+function trackLiveLocation() {
+  if (!navigator.geolocation) {
+    alert("Geolocation not supported.");
+    return;
+  }
+
+  navigator.geolocation.watchPosition(
+    (pos) => {
+      const lat = pos.coords.latitude;
+      const lng = pos.coords.longitude;
+
+      if (userMarker) {
+        userMarker.setLatLng([lat, lng]);
+      } else {
+        userMarker = L.marker([lat, lng], {
+          icon: L.icon({
+            iconUrl: 'https://cdn-icons-png.flaticon.com/512/684/684908.png',
+            iconSize: [30, 30],
+            iconAnchor: [15, 15],
+          })
+        }).addTo(map).bindPopup("📍 You are here").openPopup();
+      }
+    },
+    (err) => {
+      console.error("Tracking error:", err);
+      alert("Unable to track live location.");
+    },
+    {
+      enableHighAccuracy: true,
+      maximumAge: 2000,
+      timeout: 10000
+    }
+  );
+}
+window.onload = () => {
+  trackLiveLocation(); // start live tracking
+};
+
+
   </script>
 </body>
 </html>
